@@ -1,5 +1,6 @@
 package io.kraftsman.dreieinigkeit
 
+import io.kraftsman.dreieinigkeit.databases.entities.Task
 import io.kraftsman.dreieinigkeit.responds.TaskRespond
 import io.ktor.application.Application
 import io.ktor.application.call
@@ -11,6 +12,8 @@ import io.ktor.response.respond
 import io.ktor.routing.get
 import io.ktor.routing.routing
 import kotlinx.html.*
+import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.transactions.transaction
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
@@ -24,14 +27,22 @@ fun Application.module(testing: Boolean = false) {
         }
     }
 
+    Database.connect(
+        url = "jdbc:mysql://127.0.0.1:8889/dreieinigkeit_local?useUnicode=true&characterEncoding=utf-8&useSSL=false",
+        driver = "com.mysql.jdbc.Driver",
+        user = "root",
+        password = "root"
+    )
+
+    val tasks = transaction {
+        Task.all().sortedByDescending { it.id }.map {
+            TaskRespond(it.title, it.completed)
+        }
+    }
+
     routing {
 
         get("/") {
-            val tasks = mutableListOf<String>()
-            for (i in 0..9) {
-                tasks.add("Task $i")
-            }
-
             call.respondHtml {
                 head {
                     title { +"ToDo List" }
@@ -41,7 +52,7 @@ fun Application.module(testing: Boolean = false) {
                     p { +"a simple ToDo application" }
                     ul {
                         tasks.map {
-                            li { +it }
+                            li { +it.title }
                         }
                     }
                 }
@@ -49,11 +60,6 @@ fun Application.module(testing: Boolean = false) {
         }
 
         get("/api/v1/tasks") {
-            val tasks = mutableListOf<TaskRespond>()
-            for (i in 1..10) {
-                tasks.add(TaskRespond("Task $i"))
-            }
-
             call.respond(mapOf("tasks" to tasks))
         }
 

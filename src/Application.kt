@@ -49,8 +49,12 @@ fun Application.module(testing: Boolean = false) {
         }
 
         get("/api/v1/tasks") {
-            val task = TaskRespond("Task 1")
-            call.respond(mapOf("task" to task))
+            val tasks = mutableListOf<TaskRespond>()
+            for (i in 1..10) {
+                tasks.add(TaskRespond("Task $i"))
+            }
+
+            call.respond(mapOf("tasks" to tasks))
         }
 
     }

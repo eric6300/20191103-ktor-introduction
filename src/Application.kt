@@ -5,7 +5,10 @@ import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.features.ContentNegotiation
 import io.ktor.html.respondHtml
+import io.ktor.http.ContentType
+import io.ktor.http.HttpStatusCode
 import io.ktor.jackson.jackson
+import io.ktor.response.respondText
 import io.ktor.routing.get
 import io.ktor.routing.routing
 import kotlinx.html.*
@@ -44,6 +47,11 @@ fun Application.module(testing: Boolean = false) {
                     }
                 }
             }
+        }
+
+        get("/api/v1/tasks") {
+            //language=JSON
+            call.respondText("{\n  \"task\": {\n    \"title\": \"Task 1\",\n    \"completed\": false\n  }\n}", ContentType.Application.Json, HttpStatusCode.OK)
         }
 
     }

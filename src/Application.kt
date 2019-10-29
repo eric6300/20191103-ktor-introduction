@@ -17,7 +17,8 @@ fun Application.module(testing: Boolean = false) {
     routing {
 
         get("/") {
-            call.respondText("Hello, auto build & reload", ContentType.Text.Plain, HttpStatusCode.OK)
+            //language=HTML
+            call.respondText("<!doctype html>\n<html lang='zh-Hans'>\n<head>\n    <meta charset='UTF-8'>\n    <meta name='viewport'\n          content='width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0'>\n    <meta http-equiv='X-UA-Compatible' content='ie=edge'>\n    <title>Document</title>\n</head>\n<body>\n    <h1>Hello, HTML</h1>\n    <p>a sample application of Ktor</p>\n</body>\n</html>", ContentType.Text.Html, HttpStatusCode.OK)
         }
 
     }

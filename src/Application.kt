@@ -2,7 +2,9 @@ package io.kraftsman.dreieinigkeit
 
 import io.ktor.application.Application
 import io.ktor.application.call
-import io.ktor.response.respond
+import io.ktor.http.ContentType
+import io.ktor.http.HttpStatusCode
+import io.ktor.response.respondText
 import io.ktor.routing.get
 import io.ktor.routing.routing
 
@@ -15,7 +17,7 @@ fun Application.module(testing: Boolean = false) {
     routing {
 
         get("/") {
-            call.respond("Hello, world")
+            call.respondText("Hello, 200", ContentType.Text.Plain, HttpStatusCode.OK)
         }
 
     }

@@ -2,11 +2,10 @@ package io.kraftsman.dreieinigkeit
 
 import io.ktor.application.Application
 import io.ktor.application.call
-import io.ktor.http.ContentType
-import io.ktor.http.HttpStatusCode
-import io.ktor.response.respondText
+import io.ktor.html.respondHtml
 import io.ktor.routing.get
 import io.ktor.routing.routing
+import kotlinx.html.*
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
@@ -17,8 +16,25 @@ fun Application.module(testing: Boolean = false) {
     routing {
 
         get("/") {
-            //language=HTML
-            call.respondText("<!doctype html>\n<html lang='zh-Hans'>\n<head>\n    <meta charset='UTF-8'>\n    <meta name='viewport'\n          content='width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0'>\n    <meta http-equiv='X-UA-Compatible' content='ie=edge'>\n    <title>Document</title>\n</head>\n<body>\n    <h1>Hello, HTML</h1>\n    <p>a sample application of Ktor</p>\n</body>\n</html>", ContentType.Text.Html, HttpStatusCode.OK)
+            val tasks = mutableListOf<String>()
+            for (i in 0..9) {
+                tasks.add("Task $i")
+            }
+
+            call.respondHtml {
+                head {
+                    title { +"ToDo List" }
+                }
+                body {
+                    h1 { +"ToDo List" }
+                    p { +"a simple ToDo application" }
+                    ul {
+                        tasks.map {
+                            li { +it }
+                        }
+                    }
+                }
+            }
         }
 
     }

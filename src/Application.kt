@@ -17,7 +17,7 @@ fun Application.module(testing: Boolean = false) {
     routing {
 
         get("/") {
-            call.respondText("Hello, 200", ContentType.Text.Plain, HttpStatusCode.OK)
+            call.respondText("Hello, auto build & reload", ContentType.Text.Plain, HttpStatusCode.OK)
         }
 
     }

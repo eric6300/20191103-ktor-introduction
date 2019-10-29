@@ -5,8 +5,11 @@ import io.kraftsman.dreieinigkeit.responds.TaskRespond
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
+import io.ktor.features.CORS
 import io.ktor.features.ContentNegotiation
 import io.ktor.html.respondHtml
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpMethod
 import io.ktor.jackson.jackson
 import io.ktor.response.respond
 import io.ktor.routing.get
@@ -25,6 +28,18 @@ fun Application.module(testing: Boolean = false) {
         jackson {
 
         }
+    }
+
+    install(CORS) {
+        host("localhost:4200")
+        header(HttpHeaders.AccessControlAllowOrigin)
+        header(HttpHeaders.AccessControlAllowHeaders)
+        header(HttpHeaders.ContentType)
+        method(HttpMethod.Options)
+        method(HttpMethod.Post)
+        method(HttpMethod.Put)
+        method(HttpMethod.Patch)
+        method(HttpMethod.Delete)
     }
 
     Database.connect(
